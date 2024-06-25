@@ -72,6 +72,17 @@ regd_users.put('/auth/review/:isbn', (req, res) => {
 	});
 });
 
+regd_users.delete('/auth/review/:isbn', (req, res) => {
+	const { isbn } = req.params;
+	const { username } = req.session.authorization;
+
+	delete books[isbn].reviews[username];
+
+	return res.status(200).json({
+		message: `The review for the book with ISBN ${isbn} has been deleted`,
+	});
+});
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
