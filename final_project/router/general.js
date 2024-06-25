@@ -26,36 +26,66 @@ public_users.post('/register', (req, res) => {
 
 // Get the book list available in the shop
 public_users.get('/', function (req, res) {
-	return res.status(200).json(books);
+	const getAllBooks = new Promise((resolve, reject) => {
+		resolve(books);
+		reject('An error occurred');
+	});
+
+	getAllBooks
+		.then((result) => res.status(200).json(result))
+		.catch((err) => console.error(err));
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
 	const { isbn } = req.params;
 
-	return res.status(200).json(books[isbn]);
+	const getBookDetails = new Promise((resolve, reject) => {
+		resolve(books[isbn]);
+		reject('An error occurred');
+	});
+
+	getBookDetails
+		.then((result) => res.status(200).json(result))
+		.catch((err) => console.error(err));
 });
 
 // Get book details based on author
 public_users.get('/author/:author', function (req, res) {
 	const { author } = req.params;
 
-	for (const [key, value] of Object.entries(books)) {
-		if (value.author === author) {
-			return res.status(200).json(value);
+	const getBookByAuthor = new Promise((resolve, reject) => {
+		for (const [key, value] of Object.entries(books)) {
+			if (value.author === author) {
+				resolve(value);
+			}
 		}
-	}
+
+		reject('An error occurred');
+	});
+
+	getBookByAuthor
+		.then((result) => res.status(200).json(result))
+		.catch((err) => console.error(err));
 });
 
 // Get all books based on title
 public_users.get('/title/:title', function (req, res) {
 	const { title } = req.params;
 
-	for (const [key, value] of Object.entries(books)) {
-		if (value.title === title) {
-			return res.status(200).json(value);
+	const getBookByTitle = new Promise((resolve, reject) => {
+		for (const [key, value] of Object.entries(books)) {
+			if (value.title === title) {
+				resolve(value);
+			}
 		}
-	}
+
+		reject('An error occurred');
+	});
+
+	getBookByTitle
+		.then((result) => res.status(200).json(result))
+		.catch((err) => console.error(err));
 });
 
 //  Get book review
